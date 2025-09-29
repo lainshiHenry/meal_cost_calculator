@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Cost Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .budget-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid #667eea;
+        }
+        
+        .budget-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .budget-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .meal-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .meal-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .meal-inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+        
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        input[type="number"] {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .summary-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .summary-row.editable {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            align-items: center;
+        }
+        
+        .summary-row.total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .summary-label {
+            font-weight: 500;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
+        .percentage-input {
+            width: 70px;
+            padding: 6px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .over-budget {
+            color: #ff6b6b;
+            font-weight: 700;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .budget-status {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .under-budget {
+            background: rgba(76, 175, 80, 0.2);
+            color: #2e7d32;
+        }
+        
+        .over-budget-status {
+            background: rgba(244, 67, 54, 0.2);
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Meal Cost Calculator</h1>
+        
+        <div class="budget-section">
+            <div class="budget-label">Budget</div>
+            <input type="number" id="budget" class="budget-input" value="140" step="0.01" min="0">
+        </div>
+        
+        <div class="meal-item">
+            <div class="meal-label">Entree 1</div>
+            <div class="meal-inputs">
+                <input type="text" id="entree1Name" placeholder="Dish name">
+                <input type="number" id="entree1Cost" value="0" step="0.01" min="0">
+            </div>
+        </div>
+        
+        <div class="meal-item">
+            <div class="meal-label">Entrée 2</div>
+            <div class="meal-inputs">
+                <input type="text" id="entree2Name" placeholder="Dish name">
+                <input type="number" id="entree2Cost" value="0" step="0.01" min="0">
+            </div>
+        </div>
+        
+        <div class="meal-item">
+            <div class="meal-label">Alcoholic Beverage</div>
+            <div class="meal-inputs">
+                <input type="text" id="beverageName" placeholder="Drink name">
+                <input type="number" id="beverageCost" value="0" step="0.01" min="0">
+            </div>
+        </div>
+        
+        <div class="meal-item">
+            <div class="meal-label">App/Desert</div>
+            <div class="meal-inputs">
+                <input type="text" id="appName" placeholder="Item name">
+                <input type="number" id="appCost" value="0" step="0.01" min="0">
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value" id="subtotal">$0.00</span>
+            </div>
+            
+            <div class="summary-row editable">
+                <span class="summary-label">Tax</span>
+                <div>
+                    <input type="number" id="taxPercent" class="percentage-input" value="12" step="0.1" min="0" max="100">
+                    <span class="summary-value" id="taxAmount">$0.00</span>
+                </div>
+            </div>
+            
+            <div class="summary-row editable">
+                <span class="summary-label">Tips</span>
+                <div>
+                    <input type="number" id="tipsPercent" class="percentage-input" value="10" step="0.1" min="0" max="100">
+                    <span class="summary-value" id="tipsAmount">$0.00</span>
+                </div>
+            </div>
+            
+            <div class="summary-row total" id="totalRow">
+                <span class="summary-label">Total</span>
+                <span class="summary-value" id="total">$0.00</span>
+            </div>
+            
+            <div class="budget-status" id="budgetStatus"></div>
+        </div>
+
+        <div class="version-footer">
+            v1.0.0 | <a href="https://github.com/lainshiHenry/meal_cost_calculator" target="_blank">GitHub</a>
+        </div>
+    </div>
+    
+    <script>
+        function calculate() {
+            const entree1 = parseFloat(document.getElementById('entree1Cost').value) || 0;
+            const entree2 = parseFloat(document.getElementById('entree2Cost').value) || 0;
+            const beverage = parseFloat(document.getElementById('beverageCost').value) || 0;
+            const app = parseFloat(document.getElementById('appCost').value) || 0;
+            const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
+            const tipsPercent = parseFloat(document.getElementById('tipsPercent').value) || 0;
+            const budget = parseFloat(document.getElementById('budget').value) || 0;
+            
+            const subtotal = entree1 + entree2 + beverage + app;
+            const tax = subtotal * (taxPercent / 100);
+            const tips = subtotal * (tipsPercent / 100);
+            const total = subtotal + tax + tips;
+            
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('taxAmount').textContent = '$' + tax.toFixed(2);
+            document.getElementById('tipsAmount').textContent = '$' + tips.toFixed(2);
+            document.getElementById('total').textContent = '$' + total.toFixed(2);
+            
+            const budgetStatus = document.getElementById('budgetStatus');
+            const totalRow = document.getElementById('totalRow');
+            
+            if (total > budget) {
+                const overAmount = total - budget;
+                budgetStatus.textContent = `Over budget by $${overAmount.toFixed(2)}`;
+                budgetStatus.className = 'budget-status over-budget-status';
+                totalRow.classList.add('over-budget');
+            } else {
+                const remaining = budget - total;
+                budgetStatus.textContent = `Under budget: $${remaining.toFixed(2)} remaining`;
+                budgetStatus.className = 'budget-status under-budget';
+                totalRow.classList.remove('over-budget');
+            }
+        }
+        
+        document.getElementById('budget').addEventListener('input', calculate);
+        document.getElementById('entree1Cost').addEventListener('input', calculate);
+        document.getElementById('entree2Cost').addEventListener('input', calculate);
+        document.getElementById('beverageCost').addEventListener('input', calculate);
+        document.getElementById('appCost').addEventListener('input', calculate);
+        document.getElementById('taxPercent').addEventListener('input', calculate);
+        document.getElementById('tipsPercent').addEventListener('input', calculate);
+        
+        calculate();
+    </script>
+</body>
+</html>
